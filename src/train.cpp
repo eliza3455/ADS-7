@@ -1,41 +1,55 @@
-// Copyright 2021 NNTU-CS
+// Copyright 2022 NNTU-CS
 #include "train.h"
 
-Train::Train() : opCounter(0), head(nullptr) {}
+Train::Train() : head(nullptr), operations(0) {}
 
-void Train::attachCar(bool isLightOn) {
-  Car* newCar = new Car{isLightOn, nullptr, nullptr};
+Train::~Train() {
+  if (!head) return;
+  Car* current = head->next;
+  while (current != head) {
+    Car* temp = current;
+    current = current->next;
+    delete temp;
+  }
+  delete head;
+  head = nullptr;
+}
+
+void Train::addCar(bool light) {
+  Car* newCar = new Car{light, nullptr, nullptr};
 
   if (!head) {
     newCar->next = newCar;
     newCar->prev = newCar;
     head = newCar;
   } else {
-    Car* tail = head->prev;
-    tail->next = newCar;
-    newCar->prev = tail;
+    Car* last = head->prev;
+    last->next = newCar;
+    newCar->prev = last;
     newCar->next = head;
     head->prev = newCar;
   }
 }
 
-int Train::calculateLength() {
-  if (!head) return 0;
+int Train::getLength() {
+  if (!head)
+    return 0;
 
-  int total = 0;
-  bool hasDarkCar = false;
-  const Car* temp = head;
+  int count = 0;
+  bool hasUnlit = false;
+  Car* current = head;
 
   do {
-    if (!temp->light) hasDarkCar = true;
-    ++total;
-    temp = temp->next;
-  } while (temp != head);
+    if (!current->light)
+      hasUnlit = true;
+    current = current->next;
+    ++count;
+  } while (current != head);
 
-  opCounter = hasDarkCar ? 2 * total : total * (total + 1);
-  return total;
+  operations = hasUnlit ? 2 * count : count * (count + 1);
+  return count;
 }
 
-int Train::getOpCounter() const {
-  return opCounter;
+int Train::getOpCount() const {
+  return operations;
 }
