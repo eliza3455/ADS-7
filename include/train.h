@@ -11,13 +11,15 @@ class Train {
   };
 
   Car* head;
-  int opCounter;
+  int operations;
 
  public:
   Train();
-  void attachCar(bool isLightOn);
-  int calculateLength();
-  int getOpCounter() const;
+  ~Train();
+
+  void addCar(bool light);
+  int getLength();
+  int getOpCount() const;
 };
 
 #endif  // INCLUDE_TRAIN_H_
