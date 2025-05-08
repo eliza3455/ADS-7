@@ -37,7 +37,7 @@ int Train::getLength() {
 
   int count = 0;
   bool hasUnlit = false;
-  Car* current = head;
+  const Car* current = head;
 
   do {
     if (!current->light)
