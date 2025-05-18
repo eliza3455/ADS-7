@@ -16,7 +16,6 @@ void runExperiment(int numCars, const std::string& mode) {
   static std::uniform_int_distribution<> dist(0, 1);
   Train train;
 
-  // Добавление вагонов с соответствующим состоянием лампочки
   for (int i = 0; i < numCars; ++i) {
     bool light = (mode == "random") ? dist(gen) : (mode == "all_on");
     train.addCar(light);
@@ -25,9 +24,11 @@ void runExperiment(int numCars, const std::string& mode) {
   auto start = std::chrono::high_resolution_clock::now();
   train.getLength();
   auto end = std::chrono::high_resolution_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                    end - start).count();
 
-  std::cout << numCars << "\t\t" << mode << "\t\t"
+  std::cout << numCars << "\t\t"
+            << mode << "\t\t"
             << train.getOpCount() << "\t\t"
             << duration << "\n";
 }
